@@ -14,8 +14,11 @@ class User {
             window.axios.defaults.headers.common["Authorization"] = 'Bearer' + ' ' + access_token;
         }
     }
+    isAdmin() {
+        return AppStorage.getRole() === 'admin';
+    }
     redirectByRole() {
-        return AppStorage.getRole() === 'admin' ? '/admin' : (this.role === 'teacher' ? '/teacher' : '/student');
+        return AppStorage.getRole() === 'admin' ? '/admin' : (AppStorage.getRole() === 'teacher' ? '/teacher' : '/student');
     }
     hasToken() {
         const storedToken = AppStorage.getToken();

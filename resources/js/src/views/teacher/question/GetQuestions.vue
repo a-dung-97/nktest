@@ -1,8 +1,8 @@
 <template>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-4">
-                <form class="form-inline">
+            <div class="col-md-6">
+                <form class="form-inline d-flex">
                     <label class="sr-only" for="inlineFormInputGroupUsername2">Tìm kiếm</label>
                     <div class="input-group mb-2 mr-sm-2">
                         <div class="input-group-prepend">
@@ -24,18 +24,18 @@
                         @click="filter = ''"
                         class="btn btn-outline-info btn-sm mb-2"
                     >
-                        <i class="fa fa-refresh" aria-hidden="true"></i>
+                        <i class="fas fa-eraser" aria-hidden="true"></i>
                     </button>
+                    <p class="text-muted pt-2 pl-3">Tìm được {{ totalRows }} kết quả</p>
                 </form>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-6">
                 <b-button
-                    v-if="this.items.length"
                     variant="primary"
-                    class="float-right mr-2"
-                    @click="showFormInsert('Thêm chủ đề')"
+                    class="float-right"
+                    @click="showFormInsert('Thêm câu hỏi')"
                 >
-                    <i class="fa fa-plus" aria-hidden="true"></i> Thêm chủ đề
+                    <i class="fa fa-plus" aria-hidden="true"></i> Thêm câu hỏi
                 </b-button>
             </div>
         </div>
@@ -57,7 +57,7 @@
             <template slot="actions" slot-scope="row">
                 <b-button
                     size="sm"
-                    @click="showFormUpdate(row.item, $event.target,'Chỉnh sửa chủ đề')"
+                    @click="showFormUpdate(row.item, $event.target,'Chỉnh sửa câu hỏi')"
                     class="btn btn-info"
                 >
                     <i class="fa fa-pencil-square" aria-hidden="true"></i> Chỉnh sửa
@@ -65,6 +65,26 @@
                 <b-button class="btn btn-danger" size="sm" @click="deleteContent(row.item.id)">
                     <i class="fa fa-trash" aria-hidden="true"></i> Xoá
                 </b-button>
+                <b-button
+                    size="sm"
+                    @click="row.toggleDetails"
+                >{{ row.detailsShowing ? 'Ẩn' : 'Hiện' }}</b-button>
+            </template>
+            <template slot="row-details" slot-scope="row">
+                <b-card>
+                    <ul>
+                        <ul class="list-group">
+                            <li
+                                :class="{'list-group-item':true, 'list-group-item-primary':row.item.true_answer===key}"
+                                v-for="(answer,key) in row.item.answers"
+                                :key="key"
+                            >
+                                <b>{{ key+': ' }}</b>
+                                {{ answer }}
+                            </li>
+                        </ul>
+                    </ul>
+                </b-card>
             </template>
         </b-table>
 
@@ -79,7 +99,7 @@
             </div>
         </div>
         <!-- Info modal -->
-        <b-modal
+        <!-- <b-modal
             ref="modal"
             :id="infoModal.id"
             centered
@@ -105,7 +125,7 @@
                     <b-form-invalid-feedback v-if="!$v.form.name.required">Bạn chưa nhập tên chủ đề</b-form-invalid-feedback>
                 </b-form-group>
             </b-form>
-        </b-modal>
+        </b-modal>-->
     </div>
 </template>
 
@@ -113,20 +133,10 @@
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
 import { myTableMixin } from "../../../mixin/table";
-import CreateMultiStudent from "../../../components/CreateMultiStudent";
 export default {
     mixins: [validationMixin, myTableMixin],
-    components: { CreateMultiStudent },
-    validations: {
-        form: {
-            name: {
-                required
-            }
-        }
-    },
     data() {
         return {
-            form: { id: "", name: "" },
             fields: [
                 {
                     key: "id",
@@ -135,8 +145,14 @@ export default {
                     class: "text-center"
                 },
                 {
-                    key: "name",
-                    label: "Tên chủ đề",
+                    key: "content",
+                    label: "Nội dung",
+                    sortable: true,
+                    class: "w-50"
+                },
+                {
+                    key: "level",
+                    label: "Mức độ",
                     sortable: true,
                     class: "text-center"
                 },
@@ -148,16 +164,17 @@ export default {
                 },
                 { key: "actions", label: "Hành động", class: "text-center" }
             ],
-            //method: "",
             path: {
-                post: "/admin/subjects/" + this.$route.params.id,
+                post: "/teacher/count-subject/" + this.$route.params.id,
                 put: "/admin/topics/",
-                get: "/admin/subjects/",
+                get: "/teacher/questions/topics/",
                 delete: "/admin/topics/"
             }
         };
     },
-    methods: {}
+    created() {
+        console.log(this.items.length);
+    }
 };
 </script>
 

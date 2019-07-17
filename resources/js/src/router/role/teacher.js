@@ -1,7 +1,8 @@
 const TeacherHome = () => import(/* webpackChunkName: "teacher" */'../../views/teacher/TeacherHome.vue')
 const GetClassrooms = () => import(/* webpackChunkName: "teacher" */'../../views/teacher/classroom/GetClassrooms.vue')
 const GetClassroom = () => import(/* webpackChunkName: "teacher" */'../../views/teacher/classroom/GetClassroom.vue')
-const QuestionDashboard = () => import(/* webpackChunkName: "teacher" */'../../views/teacher/quesion/QuestionDashboard.vue')
+const QuestionDashboard = () => import(/* webpackChunkName: "teacher" */'../../views/teacher/question/QuestionDashboard.vue')
+const GetQuestions = () => import(/* webpackChunkName: "teacher" */'../../views/teacher/question/GetQuestions.vue')
 export default [
     {
         path: 'home',
@@ -31,9 +32,18 @@ export default [
         }
     },
     {
-        path: 'questions/dashboard',
-        name: 'Danh sách lớp học',
+        path: 'questions',
+        name: 'Ngân hàng câu hỏi',
         component: QuestionDashboard,
+        meta: {
+            auth: true,
+            role: 'teacher'
+        }
+    },
+    {
+        path: 'questions/:id',
+        name: 'Danh sách câu hỏi',
+        component: GetQuestions,
         meta: {
             auth: true,
             role: 'teacher'

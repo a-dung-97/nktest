@@ -12,6 +12,10 @@ class Subject extends Model
     {
         return $this->hasMany('App\Topic');
     }
+    public function questions()
+    {
+        return $this->hasManyThrough('App\Question', 'App\Topic');
+    }
     public function getPathAttribute()
     {
         return "http://nktest.test/api/admin/subjects/$this->id";

@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TopicResource extends JsonResource
+class TopicTeacherResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,11 +14,13 @@ class TopicResource extends JsonResource
      */
     public function toArray($request)
     {
-
+        $questions = $this->questions;
         return [
             'id' => $this->id,
             'name' => $this->name,
-
+            'easy' => $questions->where('level', 'Dễ')->count(),
+            'medium' => $questions->where('level', 'Trung bình')->count(),
+            'hard' => $questions->where('level', 'Khó')->count()
         ];
     }
 }

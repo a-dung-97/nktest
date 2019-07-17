@@ -12,20 +12,8 @@ export default {
         },
         {
             name: 'Ngân hàng câu hỏi',
-            url: '/teacher/classrooms',
+            url: '/teacher/questions',
             icon: 'fa fa-question',
-            children: [
-                {
-                    name: 'Tổng quan',
-                    url: '/teacher/questions/dashboard',
-                    icon: 'icon-arrow-right'
-                },
-                {
-                    name: 'Thêm câu hỏi',
-                    url: '/teacher/questions/create',
-                    icon: 'icon-arrow-right'
-                },
-            ]
         },
         {
             name: 'Quản lý đề thi',

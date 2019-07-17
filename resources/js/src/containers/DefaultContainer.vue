@@ -7,9 +7,11 @@
             <SidebarToggler class="d-md-down-none" display="lg" :defaultOpen="true" />
             <b-navbar-nav class="d-md-down-none">
                 <b-nav-text
+                    v-if="isAdmin"
                     @click="updateSchoolYear"
                     class="font-weight-bold text-muted school-year"
                 >Năm học {{ schoolYear }}</b-nav-text>
+                <b-nav-text v-else class="font-weight-bold text-muted">Năm học {{ schoolYear }}</b-nav-text>
                 <!-- <b-nav-item class="px-3" to="/dashboard">Dashboard</b-nav-item>
         <b-nav-item class="px-3" to="/users" exact>Users</b-nav-item>
                 <b-nav-item class="px-3">Settings</b-nav-item>-->
@@ -109,7 +111,8 @@ export default {
         return {
             nav: [],
             username: User.name(),
-            schoolYear: ""
+            schoolYear: "",
+            isAdmin: User.isAdmin()
         };
     },
     created() {

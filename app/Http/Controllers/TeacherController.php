@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Teacher;
 use App\Services\QuestionService;
 use App\Question;
 use App\Services\ClassroomService;
-use App\Http\Resources\ClassroomResource;
+
 use App\Classroom;
 use Illuminate\Http\Request;
 use App\Services\ExamService;
@@ -15,7 +14,8 @@ use App\Exam;
 use App\Services\TestService;
 use App\Http\Requests\TestRequest;
 use App\Test;
-use Carbon\Carbon;
+use App\Subject;
+use App\Topic;
 
 class TeacherController extends Controller
 {
@@ -55,9 +55,17 @@ class TeacherController extends Controller
     }
 
     //question
-    public function getAllQuestions()
+    public function countSubject()
     {
-        return $this->questionService->all();
+        return $this->questionService->countSubject();
+    }
+    public function countQuestionsByTopic(Subject $subject)
+    {
+        return $this->questionService->countQuestionsByTopics($subject);
+    }
+    public function getAllQuestions(Topic $topic)
+    {
+        return $this->questionService->all($topic);
     }
     public function getQuestion(Question $question)
     {

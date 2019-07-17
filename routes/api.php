@@ -53,16 +53,19 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:admin']], func
 
 Route::group(['prefix' => 'teacher', 'middleware' => ['auth', 'role:teacher']], function () {
     Route::get('amount', 'TeacherController@getTotalAmountOfAll');
+    Route::get('/count-subject', 'TeacherController@countSubject');
+    Route::get('/count-subject/{subject}', 'TeacherController@countQuestionsByTopic');
     Route::group(['prefix' => 'classrooms'], function () {
         Route::get('/', 'TeacherController@getAllClassrooms');
     });
     Route::group(['prefix' => 'questions'], function () {
-        Route::get('/', 'TeacherController@getAllQuestions');
+        Route::get('/topics/{topic}', 'TeacherController@getAllQuestions');
         Route::post('/', 'TeacherController@createQuestion');
         Route::get('/{question}', 'TeacherController@getQuestion')->middleware('can:view,question');
-        Route::put('/{question}', 'TeacherController@updateQuestion')->middleware('can:update,question');;
-        Route::delete('/{question}', 'TeacherController@deleteQuestion')->middleware('can:delete,question');;
+        Route::put('/{question}', 'TeacherController@updateQuestion')->middleware('can:update,question');
+        Route::delete('/{question}', 'TeacherController@deleteQuestion')->middleware('can:delete,question');
     });
+
     Route::group(['prefix' => 'exams'], function () {
         Route::get('/', 'TeacherController@getAllExams');
         Route::get('/{exam}', 'TeacherController@getExamQuestions');
