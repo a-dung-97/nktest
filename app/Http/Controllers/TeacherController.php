@@ -75,7 +75,7 @@ class TeacherController extends Controller
     {
         return $this->questionService->create($request);
     }
-    public function updateQuestion(QuestionRequest $request, Question $question)
+    public function updateQuestion(Request $request, Question $question)
     {
         return $this->questionService->update($request, $question);
     }

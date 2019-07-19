@@ -15,7 +15,7 @@ export default [
     },
     {
         path: 'classrooms',
-        name: 'Danh sách lớp học',
+        name: 'Danh sách lớp đang giảng dạy',
         component: GetClassrooms,
         meta: {
             auth: true,
@@ -24,7 +24,7 @@ export default [
     },
     {
         path: 'classrooms/:id',
-        name: 'Danh sách lớp học',
+        name: 'Danh sách học sinh lớp đang giảng dạy',
         component: GetClassroom,
         meta: {
             auth: true,

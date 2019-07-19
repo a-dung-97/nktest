@@ -46,9 +46,11 @@ export const myTableMixin = {
             this.form.id = item.id;
             //console.log(this.form);
             for (let field in this.form) {
-                this.form[field] = item[field]
+                if (this.form[field] instanceof Object)
+                    this.form[field] = { ...item[field] };
+                else this.form[field] = item[field];
             }
-            // console.log(this.form);
+            console.log(this.form);
             // // this.infoModal.content = item;
 
             this.$root.$emit("bv::show::modal", this.infoModal.id, button);
@@ -81,6 +83,8 @@ export const myTableMixin = {
             if (this.$v.form.$anyError) {
                 return;
             }
+            console.log('ok');
+            console.log(this.form);
             if (this.method == 'put')
                 this.updateContent();
             else if (this.method == 'post') this.insertContent()
@@ -138,7 +142,10 @@ export const myTableMixin = {
                 .then(result => {
                     let pos = this.getPosition(this.form.id);
                     for (let field in this.form) {
-                        this.items[pos][field] = this.form[field];
+
+                        if (this.form[field] instanceof Object)
+                            this.items[pos][field] = { ...this.form[field] };
+                        else this.items[pos][field] = this.form[field];
                     }
                     // this.items[pos].name = this.form.name;
                     this.$swal.fire({
@@ -150,6 +157,7 @@ export const myTableMixin = {
                     });
                 })
                 .catch(err => {
+                    console.log(err.response.data);
                     this.$swal.fire({
                         type: "error",
                         title: "Cập nhật thất bại",

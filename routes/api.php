@@ -30,7 +30,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:admin']], func
     });
     Route::group(['prefix' => 'classrooms'], function () {
         Route::get('/', 'AdminController@getAllClassrooms');
-
+        Route::get('/{classroom}', 'AdminController@getStudentsOfClassroom');
         Route::post('/', 'AdminController@createClassroom');
         Route::post('/{classroom}', 'AdminController@createStudents');
         Route::put('/{classroom}', 'AdminController@updateClassroom');

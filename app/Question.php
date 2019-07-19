@@ -10,10 +10,7 @@ class Question extends Model
     protected $casts = [
         'answers' => 'array'
     ];
-    public function getLevelAttribute($value)
-    {
-        return $value == 1 ? 'Dễ' : ($value == 2 ? 'Trung bình' : 'Khó');
-    }
+
     public function getImageAtrribute($value)
     { }
     public function teacher()

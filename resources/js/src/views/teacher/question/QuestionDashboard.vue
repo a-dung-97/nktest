@@ -5,7 +5,10 @@
                 <div class="card text-white bg-primary">
                     <div class="card-body" v-for="subject in subjects" :key="subject.id">
                         <h4 class="card-title">{{ subject.name }}</h4>
-                        <p class="card-text">{{ subject.count }} chủ đề</p>
+                        <p class="card-text">
+                            <span>{{ subject.topics_count }} chủ đề</span>
+                            <span class="float-right">{{ subject.questions_count }} câu hỏi</span>
+                        </p>
                         <button
                             @click="getSubjectDetail(subject.id)"
                             class="btn btn-outline-info text-white"

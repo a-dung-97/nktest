@@ -9,6 +9,7 @@ use App\Question;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\TopicTeacherResource;
 use Illuminate\Database\Eloquent\Builder;
+use App\Subject;
 
 class QuestionService
 {
@@ -25,21 +26,12 @@ class QuestionService
     }
     public function countSubject()
     {
-        return  DB::select('select subjects.id,subjects.name,(select count(id) 
-        FROM topics where subject_id=subjects.id) as count
-        from questions,topics,subjects where questions.topic_id=topics.id 
-        and subjects.id=topics.subject_id 
-        and questions.teacher_id=? group by subjects.id', [$this->teacher->id]);
+        return Subject::where('name', 'like', $this->teacher->subject . '%')->withCount('topics', 'questions')->get();
     }
     public function countQuestionsByTopics($subject)
     {
-        // $id = $this->teacher->id;
-        // return DB::select("select questions.topic_id as id,topics.name,count(questions.id) 
-        // FROM questions,topics,subjects WHERE questions.topic_id=topics.id and topics.subject_id=subjects.id 
-        // and subjects.id=? GROUP by questions.topic_id ", [$subject]);
-        //return $subject->topics()->with('questions')->get();
         return TopicTeacherResource::collection($subject->topics()->with(['questions' => function ($query) {
-            $query->where('teacher_id', 1);
+            $query->where('teacher_id', $this->teacher->id);
         }])->get());
     }
     public function countQuestionByTeacher()

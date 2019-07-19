@@ -70,6 +70,14 @@
                     @click="row.toggleDetails"
                 >{{ row.detailsShowing ? 'Ẩn' : 'Hiện' }}</b-button>
             </template>
+
+            <template
+                slot="level"
+                slot-scope="row"
+            >{{ (row.value ==1)?'Dễ':(row.value==2?'Trung bình':'Khó') }}</template>
+            <template slot="content" slot-scope="row">
+                <vue-mathjax :input="row.value"></vue-mathjax>
+            </template>
             <template slot="row-details" slot-scope="row">
                 <b-card>
                     <ul>
@@ -79,8 +87,7 @@
                                 v-for="(answer,key) in row.item.answers"
                                 :key="key"
                             >
-                                <b>{{ key+': ' }}</b>
-                                {{ answer }}
+                                <vue-mathjax :input="`<b>${key}. </b>`+answer"></vue-mathjax>
                             </li>
                         </ul>
                     </ul>
@@ -98,11 +105,14 @@
                 ></b-pagination>
             </div>
         </div>
+        <!-- <button @click="editorData=editorChange">Change</button> -->
         <!-- Info modal -->
-        <!-- <b-modal
+        <b-modal
             ref="modal"
+            size="lg"
             :id="infoModal.id"
             centered
+            scrollable
             :title="infoModal.title"
             header-bg-variant="info"
             header-text-variant="light"
@@ -111,21 +121,58 @@
             <template slot="modal-ok">{{ method=='post'?'Thêm':'Chỉnh sửa' }}</template>
             <template slot="modal-cancel">Huỷ bỏ</template>
             <b-form @submit.stop.prevent="submit">
-                <b-form-group label="Tên chủ đề">
-                    <b-form-input
-                        id="name"
-                        name="name"
-                        type="text"
-                        class="form-control"
-                        aria-describedby="name-feedback"
-                        v-model="$v.form.name.$model"
-                        placeholder="Nhập tên chủ đề"
-                        :state="$v.form.name.$dirty ? !$v.form.name.$error : null"
-                    />
-                    <b-form-invalid-feedback v-if="!$v.form.name.required">Bạn chưa nhập tên chủ đề</b-form-invalid-feedback>
+                <b-form-group label="Nội dung">
+                    <ckeditor :editor="editor" v-model="$v.form.content.$model"></ckeditor>
+                    <div class="ckeditor-invalid-feedback" v-if="$v.form.$dirty">
+                        <span v-if="!$v.form.content.required">Bạn chưa nhập nội dung câu hỏi</span>
+                    </div>
+                </b-form-group>
+                <b-form-group label="Đáp án A">
+                    <ckeditor :editor="editor" v-model="$v.form.answers['A'].$model"></ckeditor>
+                    <div class="ckeditor-invalid-feedback" v-if="$v.form.$dirty">
+                        <span v-if="!$v.form.answers['A'].required">Bạn chưa nhập đáp án</span>
+                    </div>
+                </b-form-group>
+                <b-form-group label="Đáp án B">
+                    <ckeditor :editor="editor" v-model="$v.form.answers['B'].$model"></ckeditor>
+                    <div class="ckeditor-invalid-feedback" v-if="$v.form.$dirty">
+                        <span v-if="!$v.form.answers['B'].required">Bạn chưa nhập đáp án</span>
+                    </div>
+                </b-form-group>
+                <b-form-group label="Đáp án C">
+                    <ckeditor :editor="editor" v-model="$v.form.answers['C'].$model"></ckeditor>
+                    <div class="ckeditor-invalid-feedback" v-if="$v.form.$dirty">
+                        <span v-if="!$v.form.answers['C'].required">Bạn chưa nhập đáp án</span>
+                    </div>
+                </b-form-group>
+                <b-form-group label="Đáp án D">
+                    <ckeditor :editor="editor" v-model="$v.form.answers['D'].$model"></ckeditor>
+                    <div class="ckeditor-invalid-feedback" v-if="$v.form.$dirty">
+                        <span v-if="!$v.form.answers['D'].required">Bạn chưa nhập đáp án</span>
+                    </div>
+                </b-form-group>
+                <b-form-group label="Đáp án đúng">
+                    <b-form-radio-group
+                        v-model="$v.form.true_answer.$model"
+                        :options="answerOptions"
+                        :state="$v.form.true_answer.$dirty ? !$v.form.true_answer.$error : null"
+                    ></b-form-radio-group>
+                    <b-form-invalid-feedback
+                        v-if="!$v.form.true_answer.required"
+                    >Bạn chưa chọn level</b-form-invalid-feedback>
+                </b-form-group>
+                <b-form-group label="Mức độ">
+                    <b-form-radio-group
+                        v-model="$v.form.level.$model"
+                        :options="levelOptions"
+                        :state="$v.form.level.$dirty ? !$v.form.level.$error : null"
+                    ></b-form-radio-group>
+                    <b-form-invalid-feedback v-if="!$v.form.level.required">Bạn chưa chọn level</b-form-invalid-feedback>
                 </b-form-group>
             </b-form>
-        </b-modal>-->
+        </b-modal>
+        <!-- <vue-mathjax :input="formula"></vue-mathjax>
+        <ckeditor :editor="editor" v-model="formula"></ckeditor>-->
     </div>
 </template>
 
@@ -133,10 +180,53 @@
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
 import { myTableMixin } from "../../../mixin/table";
+import CKEditor from "@ckeditor/ckeditor5-vue";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic/build/ckeditor";
+import VueMathjax from "../../../components/MathJax";
 export default {
     mixins: [validationMixin, myTableMixin],
+    components: { ckeditor: CKEditor.component, "vue-mathjax": VueMathjax },
+    validations: {
+        form: {
+            content: {
+                required
+            },
+            level: {
+                required
+            },
+            answers: {
+                A: {
+                    required
+                },
+                B: {
+                    required
+                },
+                C: {
+                    required
+                },
+                D: {
+                    required
+                }
+            },
+            true_answer: {
+                required
+            }
+        }
+    },
     data() {
         return {
+            form: {
+                id: "",
+                content: "",
+                level: "",
+                answers: {
+                    A: "",
+                    B: "",
+                    C: "",
+                    D: ""
+                },
+                true_answer: ""
+            },
             fields: [
                 {
                     key: "id",
@@ -165,18 +255,32 @@ export default {
                 { key: "actions", label: "Hành động", class: "text-center" }
             ],
             path: {
-                post: "/teacher/count-subject/" + this.$route.params.id,
-                put: "/admin/topics/",
+                put: "/teacher/questions/",
                 get: "/teacher/questions/topics/",
-                delete: "/admin/topics/"
-            }
+                delete: "/teacher/questions/"
+            },
+            editor: ClassicEditor,
+            levelOptions: [
+                { text: "Dễ", value: "1" },
+                { text: "Trung bình", value: "2" },
+                { text: "Khó", value: "3" }
+            ],
+            answerOptions: [
+                { text: "A", value: "A" },
+                { text: "B", value: "B" },
+                { text: "C", value: "C" },
+                { text: "D", value: "D" }
+            ]
         };
     },
-    created() {
-        console.log(this.items.length);
-    }
+
+    methods: {}
 };
 </script>
 
 <style>
+.ckeditor-invalid-feedback {
+    color: red;
+    font-size: 12px;
+}
 </style>

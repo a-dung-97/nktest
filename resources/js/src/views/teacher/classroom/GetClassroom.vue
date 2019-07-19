@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid" v-if="!insert">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-md-4">
                 <form class="form-inline">
