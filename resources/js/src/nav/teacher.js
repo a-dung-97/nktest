@@ -3,7 +3,7 @@ export default {
         {
             name: 'Trang chủ',
             url: '/teacher/home',
-            icon: 'fa fa-user',
+            icon: 'fas fa-home',
         },
         {
             name: 'Lớp học',
@@ -11,9 +11,21 @@ export default {
             icon: 'fas fa-users',
         },
         {
-            name: 'Ngân hàng câu hỏi',
+            name: 'Quản lý câu hỏi',
             url: '/teacher/questions',
             icon: 'fa fa-question',
+            children: [
+                {
+                    name: 'Ngân hàng câu hỏi',
+                    url: '/teacher/questions',
+                    icon: ' fas fa-database'
+                },
+                {
+                    name: 'Tạo mới câu hỏi',
+                    url: '/teacher/create-question',
+                    icon: ' fas fa-plus'
+                }
+            ]
         },
         {
             name: 'Quản lý đề thi',

@@ -26,7 +26,7 @@
                                 @click="filter = ''"
                                 class="btn btn-outline-info btn-sm mb-2"
                             >
-                                <i class="fa fa-refresh" aria-hidden="true"></i>
+                                <i class="fas fa-eraser" aria-hidden="true"></i>
                             </button>
                         </form>
                     </div>
@@ -39,7 +39,7 @@
                             worksheet="Danh sách học sinh"
                             name="student.xls"
                         >
-                            <i class="fa fa-file-excel-o" aria-hidden="true"></i> Xuất Excel
+                            <i class="fas fa-file-excel" aria-hidden="true"></i> Xuất Excel
                         </ExportToExcel>
                         <b-button
                             variant="primary"

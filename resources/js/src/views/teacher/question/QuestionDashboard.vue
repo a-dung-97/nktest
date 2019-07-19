@@ -32,7 +32,7 @@
                     <template slot="actions" slot-scope="row">
                         <router-link
                             tag="button"
-                            :to="'/teacher/questions/'+row.item.id"
+                            :to="'/teacher/questions/topics/'+row.item.id"
                             class="btn btn-primary"
                         >Xem danh sách</router-link>
                     </template>

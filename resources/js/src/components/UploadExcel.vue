@@ -11,7 +11,9 @@
             <button
                 class="ml-2 btn btn-info btn-sm"
                 @click="handleUpload"
-            >Chọn</button>
+            >
+                <i class="fas fa-upload"></i>
+            </button>
         </div>
     </div>
 </template>

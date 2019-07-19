@@ -37,7 +37,7 @@
                     worksheet="Danh sách học sinh"
                     name="student.xls"
                 >
-                    <i class="fa fa-file-excel-o" aria-hidden="true"></i> Xuất Excel
+                    <i class="fas fa-file-excel" aria-hidden="true"></i> Xuất Excel
                 </ExportToExcel>
             </div>
         </div>

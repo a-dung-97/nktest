@@ -3,6 +3,7 @@ const GetClassrooms = () => import(/* webpackChunkName: "teacher" */'../../views
 const GetClassroom = () => import(/* webpackChunkName: "teacher" */'../../views/teacher/classroom/GetClassroom.vue')
 const QuestionDashboard = () => import(/* webpackChunkName: "teacher" */'../../views/teacher/question/QuestionDashboard.vue')
 const GetQuestions = () => import(/* webpackChunkName: "teacher" */'../../views/teacher/question/GetQuestions.vue')
+const CreateQuestion = () => import(/* webpackChunkName: "teacher" */'../../views/teacher/question/CreateQuestion.vue')
 export default [
     {
         path: 'home',
@@ -41,9 +42,18 @@ export default [
         }
     },
     {
-        path: 'questions/:id',
+        path: 'questions/topics/:id',
         name: 'Danh sách câu hỏi',
         component: GetQuestions,
+        meta: {
+            auth: true,
+            role: 'teacher'
+        }
+    },
+    {
+        path: 'create-question',
+        name: 'Tạo mới câu hỏi',
+        component: CreateQuestion,
         meta: {
             auth: true,
             role: 'teacher'

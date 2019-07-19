@@ -3,7 +3,7 @@ export default {
         {
             name: 'Trang chủ',
             url: '/admin/home',
-            icon: 'fa fa-dashboard',
+            icon: 'fas fa-home',
         },
         {
             name: 'Quản lý lớp học',

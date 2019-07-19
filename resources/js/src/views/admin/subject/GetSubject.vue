@@ -24,7 +24,7 @@
                         @click="filter = ''"
                         class="btn btn-outline-info btn-sm mb-2"
                     >
-                        <i class="fa fa-refresh" aria-hidden="true"></i>
+                        <i class="fas fa-eraser" aria-hidden="true"></i>
                     </button>
                 </form>
             </div>
