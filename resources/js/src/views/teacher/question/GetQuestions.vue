@@ -279,8 +279,4 @@ export default {
 </script>
 
 <style>
-.ckeditor-invalid-feedback {
-    color: red;
-    font-size: 12px;
-}
 </style>

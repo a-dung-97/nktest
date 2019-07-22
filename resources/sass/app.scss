@@ -30,4 +30,8 @@ $simple-line-font-path: '~simple-line-icons/fonts/';
 @import '~sweetalert2/src/sweetalert2';
 
 //Import Animate CSS
-@import '~animate.css/animate.css'
+@import '~animate.css/animate.css';
+.ckeditor-invalid-feedback {
+    color: red;
+    font-size: 12px;
+}

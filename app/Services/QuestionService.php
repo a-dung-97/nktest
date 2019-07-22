@@ -44,7 +44,15 @@ class QuestionService
     }
     public function create($request)
     {
-        $question = $this->teacher->questions()->create($request->all());
+
+        $question = $this->teacher->questions()->create([
+            'content' => $request->content,
+            'answers' => $request->answers,
+            'topic_id' => $request->topic_id,
+            'level' => $request->level,
+            'true_answer' => $request->true_answer
+
+        ]);
         return response(new QuestionResource($question), Response::HTTP_CREATED);
     }
     public function update($request, $question)

@@ -34,6 +34,7 @@
                             <span v-if="!$v.form.answers['D'].required">Bạn chưa nhập đáp án</span>
                         </div>
                     </b-form-group>
+
                     <b-form-group label="Đáp án đúng">
                         <b-form-radio-group
                             v-model="$v.form.true_answer.$model"
@@ -52,8 +53,31 @@
                         ></b-form-radio-group>
                         <b-form-invalid-feedback v-if="!$v.form.level.required">Bạn chưa chọn level</b-form-invalid-feedback>
                     </b-form-group>
+                    <b-form-group label="Môn học">
+                        <b-form-radio-group
+                            v-model="$v.form.subject_id.$model"
+                            :options="subjectOptions"
+                            :state="$v.form.subject_id.$dirty ? !$v.form.subject_id.$error : null"
+                            @change="getTopics($event)"
+                        ></b-form-radio-group>
+                        <b-form-invalid-feedback
+                            v-if="!$v.form.true_answer.required"
+                        >Bạn chưa chọn môn học</b-form-invalid-feedback>
+                    </b-form-group>
+                    <b-form-group label="Chủ đề">
+                        <b-form-select
+                            v-model="$v.form.topic_id.$model"
+                            :state="$v.form.topic_id.$dirty ? !$v.form.topic_id.$error : null"
+                            :options="topicOptions"
+                        ></b-form-select>
+
+                        <b-form-invalid-feedback
+                            v-if="$v.form.$dirty?!$v.form.topic_id.required:false"
+                        >Bạn chưa chọn chủ đề</b-form-invalid-feedback>
+                    </b-form-group>
                 </b-form>
-                <button type="button" class="btn btn-primary">Thêm câu hỏi</button>
+                <button type="button" @click="postQuestion" class="btn btn-primary">Thêm câu hỏi</button>
+                <!-- <button type="button" @click="reset" class="btn btn-primary">Reset</button> -->
             </div>
         </div>
     </div>
@@ -92,6 +116,12 @@ export default {
             },
             true_answer: {
                 required
+            },
+            subject_id: {
+                required
+            },
+            topic_id: {
+                required
             }
         }
     },
@@ -107,7 +137,9 @@ export default {
                     C: "",
                     D: ""
                 },
-                true_answer: ""
+                true_answer: "",
+                topic_id: null,
+                subject_id: ""
             },
             fields: [
                 {
@@ -152,8 +184,77 @@ export default {
                 { text: "B", value: "B" },
                 { text: "C", value: "C" },
                 { text: "D", value: "D" }
-            ]
+            ],
+            subjectOptions: [],
+            topicOptions: [{ text: "Hãy chọn chủ đề", value: null }]
         };
+    },
+    created() {
+        this.getSubjects();
+        console.log(this.$v.form.topic_id.required);
+    },
+    methods: {
+        async getSubjects() {
+            try {
+                let subjects = await axios.get("/teacher/count-subject");
+                subjects.data.forEach(obj => {
+                    this.subjectOptions.push({
+                        text: obj.name,
+                        value: obj.id
+                    });
+                });
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        async getTopics(e) {
+            try {
+                let topics = await axios.get("/teacher/count-subject/" + e);
+                topics.data.data.forEach(obj => {
+                    this.topicOptions.push({
+                        text: obj.name,
+                        value: obj.id
+                    });
+                });
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        async postQuestion() {
+            this.$v.form.$touch();
+            if (this.$v.form.$anyError) {
+                this.error = true;
+                return;
+            }
+            // delete this.form["subject_id"];
+            console.log(this.form);
+            try {
+                let data = await axios.post("/teacher/questions", this.form);
+                this.$swal.fire({
+                    type: "success",
+                    title: "Thêm thành công",
+                    showConfirmButton: false,
+                    timer: 1500
+                    //toast: true
+                });
+                this.resetForm();
+            } catch (error) {
+                console.log(error.response.data);
+            }
+        },
+        resetForm() {
+            for (let field in this.form) {
+                if (this.form[field] instanceof Object) {
+                    for (let answer in this.form[field]) {
+                        this.form[field][answer] = "";
+                    }
+                } else {
+                    this.form[field] = "";
+                    console.log("ok");
+                }
+            }
+            setTimeout(() => this.$v.form.$reset(), 0);
+        }
     }
 };
 </script>
