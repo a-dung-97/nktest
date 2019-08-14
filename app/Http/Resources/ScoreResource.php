@@ -16,9 +16,8 @@ class ScoreResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'test' => Test::find($this->test_id)->name,
-            'created_at' => $this->created_at->toDateString(),
+            'student_id' => $this->student_id,
+            'student_name' => $this->student->name,
             'result' => $this->result
         ];
     }

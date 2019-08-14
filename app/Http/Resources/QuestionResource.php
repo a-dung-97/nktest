@@ -20,6 +20,7 @@ class QuestionResource extends JsonResource
             'answers' => $this->answers,
             'true_answer' => $this->true_answer,
             'level' => $this->level,
+            'topic' => $this->topic->name,
             'created_at' => $this->created_at->toDateTimeString()
         ];
     }

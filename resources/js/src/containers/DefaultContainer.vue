@@ -4,7 +4,12 @@
             <SidebarToggler class="d-lg-none" display="md" mobile />
             <div class="navbar-brand ml-2 font-weight-bold" style="color:black">NK TEST</div>
 
-            <SidebarToggler class="d-md-down-none" display="lg" :defaultOpen="true" />
+            <SidebarToggler
+                :disabled="!defaultOpen"
+                class="d-md-down-none"
+                display="lg"
+                :defaultOpen="defaultOpen"
+            />
             <b-navbar-nav class="d-md-down-none">
                 <b-nav-text
                     v-if="isAdmin"
@@ -50,7 +55,7 @@
                     leave-active-class="animated fadeOutDown faster"
                     mode="out-in"
                 >
-                    <router-view></router-view>
+                    <router-view @sidebar="toggleSidebar"></router-view>
                 </transition>
             </main>
         </div>
@@ -111,6 +116,7 @@ export default {
         return {
             nav: [],
             username: User.name(),
+            defaultOpen: true,
             schoolYear: "",
             isAdmin: User.isAdmin()
         };
@@ -175,6 +181,15 @@ export default {
                     this.setCurrentSchoolYear();
                 }
             });
+        },
+        test(e) {
+            console.log(e);
+        },
+        toggleSidebar() {
+            setTimeout(() => {
+                document.body.classList.toggle("sidebar-lg-show");
+                this.defaultOpen = !this.defaultOpen;
+            }, 0);
         }
     }
 };

@@ -32,7 +32,7 @@
                 <b-button
                     v-if="this.items.length"
                     variant="primary"
-                    class="float-right mr-2"
+                    class="float-right"
                     @click="showFormInsert('Thêm môn học')"
                 >
                     <i class="fa fa-plus" aria-hidden="true"></i> Thêm môn học

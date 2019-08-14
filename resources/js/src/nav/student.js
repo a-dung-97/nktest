@@ -1,13 +1,24 @@
 export default {
     items: [
         {
-            name: 'STUDENT',
-            url: '/dashboard',
+            name: 'Trang chủ',
+            url: '/student/home',
             icon: 'fa fa-user',
-            badge: {
-                variant: 'primary',
-                text: 'NEW',
-            },
+        },
+        {
+            name: 'Kì thi',
+            url: '/student/tests',
+            icon: 'fa fa-book-reader',
+        },
+        {
+            name: 'Kết quả thi',
+            url: '/student/scores',
+            icon: 'fas fa-clipboard-list',
+        },
+        {
+            name: 'Bài tập',
+            url: '/student/homework',
+            icon: 'fas fa-book-open',
         },
     ],
 }

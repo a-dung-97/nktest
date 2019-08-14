@@ -6,6 +6,7 @@ use App\Http\Resources\MixedQuestionResource;
 use App\Http\Resources\ScoreResource;
 use App\Http\Resources\TestResource;
 use Illuminate\Http\Response;
+use App\Http\Resources\StudentScoreResource;
 
 class TestService
 {
@@ -20,7 +21,7 @@ class TestService
     }
     public function allByTeacher()
     {
-        return TestResource::collection($this->teacher->tests()->with('classroom')->get());
+        return TestResource::collection($this->teacher->tests()->with('classroom:id,name', 'exam:id')->latest()->get());
     }
     public function countTestByTeacher()
     {
@@ -28,8 +29,13 @@ class TestService
     }
     public function allByStudent()
     {
-        return TestResource::collection($this->student->classroom->tests()->upComingOrHappening()->get());
+        return TestResource::collection(
+            $this->student->classroom->tests()->with(['scores' => function ($query) {
+                $query->where('student_id', $this->student->id);
+            }])->get()->whereIn('status', ['Đang diễn ra', 'Sắp diễn ra'])
+        );
     }
+
     public function create($request)
     {
         $test = $this->teacher->tests()->create([
@@ -40,6 +46,13 @@ class TestService
             'exam_id' => $request->exam_id,
             'school_year_id' => getCurrentSchoolYear()->id,
         ]);
+        $students = $test->classroom->students->pluck('id')->all();
+        foreach ($students as $student) {
+            $test->scores()->create([
+                'student_id' => $student,
+                'result' => 0
+            ]);
+        }
         return response($test, Response::HTTP_CREATED);
     }
     public function update($request, $test)
@@ -101,15 +114,33 @@ class TestService
     public function storeScore($answer, $test)
     {
         $score = $this->compareToTrueAnswers($answer, $test);
+        // return $score;
+        // $result = $test->scores()->create([
+        //     'student_id' => $this->student->id,
+        //     'result' => $score,
+        // ]);
         //return $score;
-        $result = $test->scores()->create([
-            'student_id' => $this->student->id,
-            'result' => $score,
-        ]);
-        return response($result, Response::HTTP_CREATED);
+        $this->student->scores()->where('test_id', $test->id)->first()->update(['result' => $score]);
+        return response('ok', Response::HTTP_ACCEPTED);
     }
     public function getScoreByStudent()
     {
-        return ScoreResource::collection($this->student->scores);
+        return StudentScoreResource::collection($this->student->scores()->whereRaw('created_at<updated_at')->get());
+    }
+    public function getTestResult($test)
+    {
+        $result = $test->scores()->with('student')->get();
+        return ScoreResource::collection($result)->additional([
+            'meta' => [
+                'name' => $test->name,
+                'classroom' => $test->classroom->name,
+                'score_per_question' => $test->exam->score_per_question
+            ],
+            'statistics' => [
+                'min' => $result->min('result'),
+                'max' => $result->max('result'),
+                'avg' => round($result->avg('result'), 2)
+            ]
+        ]);
     }
 }

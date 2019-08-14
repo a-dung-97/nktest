@@ -9,6 +9,7 @@ import BootstrapVue from 'bootstrap-vue'
 import App from './App.vue'
 import router from './router'
 import User from './/helpers/User'
+
 // main.js
 import VueSweetalert2 from 'vue-sweetalert2';
 Vue.use(VueSweetalert2);
@@ -28,7 +29,7 @@ router.beforeEach((to, from, next) => {
     }
     else if (to.meta.auth === true) {
         if (User.loggedIn()) {
-            if (to.meta.role === User.role()) {
+            if (to.meta.role === User.role() || to.meta.role == null) {
                 next()
             }
             else {

@@ -23,9 +23,9 @@ class Exam extends Model
     {
         return $this->belongsTo('App\Subject');
     }
-    public function test()
+    public function tests()
     {
-        return $this->belongsTo('App\Test');
+        return $this->hasMany('App\Test');
     }
     public function getQuestionCountAttribute()
     {

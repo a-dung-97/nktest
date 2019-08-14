@@ -73,6 +73,16 @@ export default [
             role: 'admin'
         },
     },
+    // {
+    //     path: 'account',
+    //     name: 'Tài khoản',
+    //     component: GetSubjects,
+
+    //     meta: {
+    //         auth: true,
+    //         role: 'admin'
+    //     }
+    // },
 
 
 ]

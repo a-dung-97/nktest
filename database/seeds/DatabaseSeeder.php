@@ -3,6 +3,8 @@
 use Illuminate\Database\Seeder;
 use App\User;
 use App\Classroom;
+use Illuminate\Support\Facades\DB;
+use App\Score;
 
 class DatabaseSeeder extends Seeder
 {
@@ -71,6 +73,13 @@ class DatabaseSeeder extends Seeder
         // });
 
         //factory(App\Topic::class, 20)->create();
-        factory(App\Question::class, 1500)->create();
+        // factory(App\Question::class, 1500)->create();
+        $students = Score::all()->pluck('id')->all();
+        foreach ($students as $student) {
+            Score::find($student)->update([
+                'result' => rand(0, 20) / 2
+            ]);
+        }
+        // DB::update('')
     }
 }

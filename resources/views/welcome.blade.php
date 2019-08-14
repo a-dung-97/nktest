@@ -30,20 +30,20 @@
                             <h1 class="text-center text-md-left">
                                 <i class="fa fa-warning fa-2x"></i>
                             </h1>
-                            <h4 class="pt-3">Browser not Support</h4>
+                            <h4 class="pt-3">Trình duyệt không được hỗ trợ hoặc bạn chưa bật Javascript</h4>
                             <p class="text-muted">
-                                Try other browser which have Javascript Support. Recommendation is
+                                Thử một trình duyệt có hỗ trợ Javascript:
                                 <a
                                     href="https://www.google.com/chrome/?brand=CHBD&gclid=CjwKCAjw6-_eBRBXEiwA-5zHaa78eJ_HfOScWr1D4PzHFZY2k2zRHc9pcHZ9gvAaHbljCsSC1gv0jBoCKIUQAvD_BwE&gclsrc=aw.ds">
                                     Google Chrome
                                 </a>
-                                or
+                                hoặc
                                 <a href="https://www.mozilla.org/en-US/">
                                     Mozilla Firefox
-                                </a>
+                                </a> hoặc kiểm tra cài đặt để chắc chắn bạn đã bật cho phép chạy Javascript
                                 <br>
                                 <a class="btn btn-primary mt-3" href="{{ url()->current() }}">
-                                    Reload Page
+                                    Tải lại trang
                                 </a>
                             </p>
                         </div>

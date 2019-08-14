@@ -175,9 +175,9 @@ export default {
             },
             editor: ClassicEditor,
             levelOptions: [
-                { text: "Dễ", value: "1" },
-                { text: "Trung bình", value: "2" },
-                { text: "Khó", value: "3" }
+                { text: "Dễ", value: "Dễ" },
+                { text: "Trung bình", value: "Trung bình" },
+                { text: "Khó", value: "Khó" }
             ],
             answerOptions: [
                 { text: "A", value: "A" },
@@ -210,6 +210,7 @@ export default {
         async getTopics(e) {
             try {
                 let topics = await axios.get("/teacher/count-subject/" + e);
+                this.topicOptions = [];
                 topics.data.data.forEach(obj => {
                     this.topicOptions.push({
                         text: obj.name,

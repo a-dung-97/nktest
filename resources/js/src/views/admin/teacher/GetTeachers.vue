@@ -31,7 +31,7 @@
             <div class="col-md-8">
                 <b-button
                     variant="primary"
-                    class="float-right mr-2"
+                    class="float-right"
                     @click="showFormInsert('Thêm giáo viên')"
                 >
                     <i class="fa fa-plus" aria-hidden="true"></i> Thêm giáo viên

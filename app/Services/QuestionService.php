@@ -22,7 +22,7 @@ class QuestionService
     }
     public function all($topic)
     {
-        return QuestionResource::collection($this->teacher->questions()->where('topic_id', $topic->id)->get());
+        return QuestionResource::collection($this->teacher->questions()->where('topic_id', $topic->id)->latest()->get());
     }
     public function countSubject()
     {
@@ -32,6 +32,12 @@ class QuestionService
     {
         return TopicTeacherResource::collection($subject->topics()->with(['questions' => function ($query) {
             $query->where('teacher_id', $this->teacher->id);
+        }])->get());
+    }
+    public function countQuestionsRemainByTopics($subject)
+    {
+        return TopicTeacherResource::collection($subject->topics()->with(['questions' => function ($query) {
+            $query->where('teacher_id', $this->teacher->id)->whereNotIn('id', DB::table('exam_question')->get()->pluck('question_id')->all());
         }])->get());
     }
     public function countQuestionByTeacher()
@@ -61,34 +67,28 @@ class QuestionService
         return response('updated', Response::HTTP_ACCEPTED);
     }
 
-    public function random($conditions)
+    public function random($conditions, $duplication)
     {
         $easy = collect([]);
         $medium = collect([]);
         $hard = collect([]);
         $questions = collect([]);
-        //return $conditions[0]['id'];
-        //return $this->teacher;
+        $query = collect($this->teacher->questions);
+        if (!$duplication) $query = $query->whereNotIn('id', DB::table('exam_question')->get()->pluck('question_id')->all());
         foreach ($conditions as $condition) {
             $easy = $easy->merge(
-                $this->teacher
-                    ->questions()
-                    ->where([['level', 1], ['topic_id', $condition['id']]])
-                    ->get()
+                $query
+                    ->where('level', 'Dễ')->where('topic_id', $condition['id'])
                     ->random($condition['easy'])
             );
             $medium = $medium->merge(
-                $this->teacher
-                    ->questions()
-                    ->where([['level', 2], ['topic_id', $condition['id']]])
-                    ->get()
+                $query
+                    ->where('level', 'Trung bình')->where('topic_id', $condition['id'])
                     ->random($condition['medium'])
             );
             $hard = $hard->merge(
-                $this->teacher
-                    ->questions()
-                    ->where([['level', 3], ['topic_id', $condition['id']]])
-                    ->get()
+                $query
+                    ->where('level', 'Khó')->where('topic_id', $condition['id'])
                     ->random($condition['hard'])
             );
         }

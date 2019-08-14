@@ -51,13 +51,17 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:admin']], func
 });
 
 
+
 Route::group(['prefix' => 'teacher', 'middleware' => ['auth', 'role:teacher']], function () {
     Route::get('amount', 'TeacherController@getTotalAmountOfAll');
     Route::get('/count-subject', 'TeacherController@countSubject');
     Route::get('/count-subject/{subject}', 'TeacherController@countQuestionsByTopic');
+    Route::get('/count-questions-remain/{subject}', 'TeacherController@countQuestionsRemainByTopics');
+    Route::get('/topic-name/{id}', 'TeacherController@getTopicNameById');
     Route::group(['prefix' => 'classrooms'], function () {
         Route::get('/', 'TeacherController@getAllClassrooms');
     });
+    Route::apiResource('homeworks', 'HomeworkController');
     Route::group(['prefix' => 'questions'], function () {
         Route::get('/topics/{topic}', 'TeacherController@getAllQuestions');
         Route::post('/', 'TeacherController@createQuestion');
@@ -69,7 +73,9 @@ Route::group(['prefix' => 'teacher', 'middleware' => ['auth', 'role:teacher']], 
     Route::group(['prefix' => 'exams'], function () {
         Route::get('/', 'TeacherController@getAllExams');
         Route::get('/{exam}', 'TeacherController@getExamQuestions');
+        Route::put('/{exam}', 'TeacherController@updateExam');
         Route::post('/', 'TeacherController@createExam');
+        Route::delete('/{exam}', 'TeacherController@deleteExam');
     });
     Route::group(['prefix' => 'tests'], function () {
         Route::get('/', 'TeacherController@getAllTests');
@@ -81,10 +87,12 @@ Route::group(['prefix' => 'teacher', 'middleware' => ['auth', 'role:teacher']], 
 });
 
 Route::group(['prefix' => 'student', 'middleware' => ['auth', 'role:student']], function () {
+    Route::get('/amount', 'StudentController@getAmount');
     Route::get('/tests', 'StudentController@getAllTests');
     Route::get('/tests/{test}', 'StudentController@getTest');
     Route::post('tests/{test}', 'StudentController@submitAnswers');
     Route::get('scores', 'StudentController@getScore');
+    Route::get('homeworks', 'StudentController@getHomeworks');
 });
 
 Route::get('schoolyear', 'UserController@getCurrentSchoolYear');

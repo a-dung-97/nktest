@@ -23,6 +23,14 @@ class Classroom extends Model
     {
         return $this->hasMany('App\Test');
     }
+    public function subjects()
+    {
+        return $this->belongsToMany('App\Teacher');
+    }
+    public function homeworks()
+    {
+        return $this->hasMany('App\Homework');
+    }
     public function scopeGraduated($query)
     {
         $cur = explode('-', getCurrentSchoolYear()->name)[0];

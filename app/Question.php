@@ -25,4 +25,12 @@ class Question extends Model
     {
         return $query->where('level', $type);
     }
+    public function getLevelAttribute($value)
+    {
+        return ($value == 1) ? 'Dễ' : ($value == 2 ? 'Trung bình' : 'Khó');
+    }
+    public function setLevelAttribute($value)
+    {
+        $this->attributes['level'] = ($value == 'Dễ') ? 1 : ($value == 'Trung bình' ? 2 : 3);
+    }
 }

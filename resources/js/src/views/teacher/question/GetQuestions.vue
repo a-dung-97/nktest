@@ -30,20 +30,18 @@
                 </form>
             </div>
             <div class="col-md-6">
-                <b-button
-                    variant="primary"
-                    class="float-right"
-                    @click="showFormInsert('Thêm câu hỏi')"
-                >
-                    <i class="fa fa-plus" aria-hidden="true"></i> Thêm câu hỏi
+                <b-button variant="primary" class="float-right" @click="refresh">
+                    <i class="fa fa-plus" aria-hidden="true"></i> Làm mới
                 </b-button>
             </div>
         </div>
         <b-table
             show-empty
+            stacked="md"
             :empty-text="emptyText"
             :empty-filtered-text="emptyFilteredText"
-            stacked="md"
+            :sort-by.sync="sortBy"
+            :sort-desc.sync="sortDesc"
             :items="items"
             :fields="fields"
             :current-page="currentPage"
@@ -71,10 +69,10 @@
                 >{{ row.detailsShowing ? 'Ẩn' : 'Hiện' }}</b-button>
             </template>
 
-            <template
+            <!-- <template
                 slot="level"
                 slot-scope="row"
-            >{{ (row.value ==1)?'Dễ':(row.value==2?'Trung bình':'Khó') }}</template>
+            >{{ (row.value ==1)?'Dễ':(row.value==2?'Trung bình':'Khó') }}</template>-->
             <template slot="content" slot-scope="row">
                 <vue-mathjax :input="row.value"></vue-mathjax>
             </template>
@@ -261,9 +259,9 @@ export default {
             },
             editor: ClassicEditor,
             levelOptions: [
-                { text: "Dễ", value: "1" },
-                { text: "Trung bình", value: "2" },
-                { text: "Khó", value: "3" }
+                { text: "Dễ", value: "Dễ" },
+                { text: "Trung bình", value: "Trung bình" },
+                { text: "Khó", value: "Khó" }
             ],
             answerOptions: [
                 { text: "A", value: "A" },
@@ -274,7 +272,11 @@ export default {
         };
     },
 
-    methods: {}
+    methods: {
+        refresh() {
+            this.getData();
+        }
+    }
 };
 </script>
 

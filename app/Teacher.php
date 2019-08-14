@@ -29,6 +29,10 @@ class Teacher extends Model
     {
         return $this->belongsTo('App\User');
     }
+    public function homeworks()
+    {
+        return $this->hasMany('App\Homework');
+    }
     public function getNameAttribute()
     {
         return $this->user->name;

@@ -15,3 +15,4 @@ Route::view('/', 'welcome');
 Route::view('/{any}', 'welcome');
 Route::view('/{any}/{any1}', 'welcome');
 Route::view('/{any}/{any1}/{any2}', 'welcome');
+Route::view('/{any}/{any1}/{any2}/{any3}', 'welcome');

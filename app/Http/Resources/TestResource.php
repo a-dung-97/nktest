@@ -19,8 +19,10 @@ class TestResource extends JsonResource
             'name' => $this->name,
             'time' => $this->time,
             'start_at' => $this->start_at,
-            'classroom' => $this->classroom->name,
-            'status' => $this->status
+            'classroom' => $this->classroom,
+            'exam_id' => $this->exam->id,
+            'status' => $this->status,
+            'isFinished' => $this->scores->all()[0]->created_at < $this->scores->all()[0]->updated_at
         ];
     }
 }

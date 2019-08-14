@@ -10,6 +10,8 @@ import student from './role/student';
 import teacher from './role/teacher';
 import Page403 from '../views/pages/Page403.vue';
 import Page404 from '../views/pages/Page404.vue';
+import ChangePassword from '../views/pages/ChangePassword.vue';
+import Account from '../views/pages/Account.vue';
 Vue.use(VueRouter);
 const routes = [
     {
@@ -48,6 +50,7 @@ const routes = [
     },
     {
         path: '/student',
+        redirect: '/student/home',
         name: 'Student',
         component: DefaultContainer,
         children: student,
@@ -67,8 +70,16 @@ const routes = [
     {
         path: '*',
         component: Page404
-    }
-
+    },
+    {
+        path: '/account/info',
+        name: 'Thông tin tài khoản',
+        component: Account,
+        meta: {
+            auth: true,
+            role: null,
+        }
+    },
 
 ]
 const router = new VueRouter({

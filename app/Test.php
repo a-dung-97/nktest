@@ -10,11 +10,8 @@ class Test extends Model
     protected $guarded = [];
     public function scopeUpComingOrHappening($query)
     {
-        return $query->where('start_at', '>', now())
-            ->orWhere([
-                ['start_at', '>=', Carbon::parse($this->start)],
-                ['start_at', '<=', Carbon::parse($this->start)->addMinutes($this->time + 5)]
-            ]);
+        return $query->where('status', 'Đang diễn ra')
+            ->orWhere('status', 'Sắp diễn ra');
     }
     public function exam()
     {

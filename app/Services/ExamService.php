@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Http\Resources\ExamResource;
 use App\Http\Resources\QuestionResource;
 use App\Teacher;
+use Illuminate\Http\Response;
 
 class ExamService
 {
@@ -22,7 +23,7 @@ class ExamService
     }
     public function all()
     {
-        return ExamResource::collection($this->teacher->exams()->with('subject', 'questions')->get());
+        return ExamResource::collection($this->teacher->exams()->with('subject', 'questions')->latest()->get());
     }
     public function countExamByTeacher()
     {
@@ -30,11 +31,16 @@ class ExamService
     }
     public function questions($exam)
     {
-        return QuestionResource::collection($exam->questions);
+        return QuestionResource::collection($exam->questions()->with('topic:id,name')->get());
+    }
+    public function updateExam($exam, $request)
+    {
+        $exam->update($request->all());
+        return response('updated', Response::HTTP_ACCEPTED);
     }
     public function create($request)
     {
-        $questions = $this->questionService->random($request->conditions);
+        $questions = $this->questionService->random($request->conditions, $request->duplication);
         //return $questions;
         $exam = $this->teacher->exams()->create([
             'name' => $request->exam['name'],

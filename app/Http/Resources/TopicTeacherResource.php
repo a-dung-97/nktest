@@ -18,9 +18,9 @@ class TopicTeacherResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'easy' => $questions->where('level', '1')->count(),
-            'medium' => $questions->where('level', '2')->count(),
-            'hard' => $questions->where('level', '3')->count()
+            'easy' => $questions->where('level', 'Dễ')->count(),
+            'medium' => $questions->where('level', 'Khó')->count(),
+            'hard' => $questions->where('level', 'Trung bình')->count()
         ];
     }
 }

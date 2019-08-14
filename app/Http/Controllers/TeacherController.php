@@ -63,6 +63,10 @@ class TeacherController extends Controller
     {
         return $this->questionService->countQuestionsByTopics($subject);
     }
+    public function countQuestionsRemainByTopics(Subject $subject)
+    {
+        return $this->questionService->countQuestionsRemainByTopics($subject);
+    }
     public function getAllQuestions(Topic $topic)
     {
         return $this->questionService->all($topic);
@@ -99,9 +103,17 @@ class TeacherController extends Controller
         //return $request;
         return $this->examService->create($request);
     }
+    public function updateExam(Exam $exam, Request $request)
+    {
+        return $this->examService->updateExam($exam, $request);
+    }
     public function deleteExam(Exam $exam)
     {
         return delete($exam);
+    }
+    public function getTopicNameById($id)
+    {
+        return Topic::find($id)->name;
     }
 
     //test
@@ -120,5 +132,9 @@ class TeacherController extends Controller
     public function deleteTest(Test $test)
     {
         return delete($test);
+    }
+    public function getTestResult(Test $test)
+    {
+        return $this->testService->getTestResult($test);
     }
 }

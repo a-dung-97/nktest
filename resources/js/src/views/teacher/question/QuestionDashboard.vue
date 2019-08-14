@@ -1,9 +1,9 @@
 <template>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-4" v-for="subject in subjects" :key="subject.id">
                 <div class="card text-white bg-primary">
-                    <div class="card-body" v-for="subject in subjects" :key="subject.id">
+                    <div class="card-body">
                         <h4 class="card-title">{{ subject.name }}</h4>
                         <p class="card-text">
                             <span>{{ subject.topics_count }} chủ đề</span>
@@ -76,13 +76,13 @@ export default {
                 },
                 {
                     key: "medium",
-                    label: "Khó",
+                    label: "Trung bình",
                     sortable: true,
                     class: "text-center"
                 },
                 {
                     key: "hard",
-                    label: "Trung bình",
+                    label: "Khó",
                     sortable: true,
                     class: "text-center"
                 },
