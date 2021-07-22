@@ -50,6 +50,6 @@
         "vue-sweetalert2": "^2.1.1",
         "vuelidate": "^0.7.4",
         "vuetable-2": "^2.0.0-beta.4",
-        "xlsx": "^0.14.3"
+        "xlsx": "^0.17.0"
     }
 }
